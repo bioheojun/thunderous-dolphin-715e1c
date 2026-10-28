@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>호우 대응 3부처 브리핑</title>
+<meta name="description" content="2026년 5월 25일 호우 대응 관련 행정안전부·기상청·경찰청 보도자료 통합 조회 및 부처별 정합성 매트릭스">
+<style>
+  :root{
+    --bg:#f5f6f8; --surface:#ffffff; --surface-2:#eef1f5;
+    --text:#14181f; --text-dim:#5b6472; --line:#dde2ea;
+    --accent:#1d4ed8; --accent-soft:#e6edff;
+    --mois:#1d4ed8; --mois-bg:#e6edff;
+    --kma:#047857; --kma-bg:#dcf5ec;
+    --npa:#b45309; --npa-bg:#fdeed3;
+    --warn:#c2410c; --warn-bg:#fff0e6; --warn-line:#f5c9ad;
+    --shadow:0 1px 2px rgba(20,24,31,.06), 0 8px 24px rgba(20,24,31,.06);
+    --radius:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0e1116; --surface:#171b22; --surface-2:#1f242d;
+      --text:#e8ecf2; --text-dim:#9aa5b4; --line:#2c333d;
+      --accent:#7aa2ff; --accent-soft:#1b2740;
+      --mois:#8ab0ff; --mois-bg:#1b2740;
+      --kma:#5fd4ab; --kma-bg:#13302a;
+      --npa:#f0b45e; --npa-bg:#352713;
+      --warn:#ffa470; --warn-bg:#35211a; --warn-line:#5c3826;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0e1116; --surface:#171b22; --surface-2:#1f242d;
+    --text:#e8ecf2; --text-dim:#9aa5b4; --line:#2c333d;
+    --accent:#7aa2ff; --accent-soft:#1b2740;
+    --mois:#8ab0ff; --mois-bg:#1b2740;
+    --kma:#5fd4ab; --kma-bg:#13302a;
+    --npa:#f0b45e; --npa-bg:#352713;
+    --warn:#ffa470; --warn-bg:#35211a; --warn-line:#5c3826;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,-apple-system,"Segoe UI",sans-serif;
+    line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1000px; margin:0 auto; padding:0 16px 72px}
+
+  /* ── 헤더 ───────────────────────────── */
+  header.top{
+    background:var(--surface); border-bottom:1px solid var(--line);
+    padding:28px 0 24px; margin-bottom:28px;
+  }
+  .eyebrow{
+    font-size:12px; letter-spacing:.14em; font-weight:700;
+    color:var(--accent); text-transform:uppercase; margin:0 0 8px;
+  }
+  h1{font-size:clamp(22px,4.2vw,31px); line-height:1.3; margin:0 0 10px; letter-spacing:-.02em}
+  .sub{margin:0; color:var(--text-dim); font-size:14px}
+
+  /* ── 검색 ───────────────────────────── */
+  .panel{
+    background:var(--surface); border:1px solid var(--line);
+    border-radius:var(--radius); box-shadow:var(--shadow);
+    padding:18px; margin-bottom:22px;
+  }
+  .search-row{display:flex; gap:10px; flex-wrap:wrap}
+  .search-row input{
+    flex:1 1 220px; min-width:0;
+    padding:11px 14px; font-size:15px; font-family:inherit;
+    color:var(--text); background:var(--surface-2);
+    border:1px solid var(--line); border-radius:10px;
+  }
+  .search-row input:focus{outline:2px solid var(--accent); outline-offset:1px}
+  .search-row button{
+    padding:11px 18px; font-size:14px; font-weight:600; font-family:inherit;
+    color:#fff; background:var(--accent); border:0; border-radius:10px; cursor:pointer;
+  }
+  .search-row button.ghost{
+    color:var(--text-dim); background:transparent; border:1px solid var(--line);
+  }
+  .chips{display:flex; gap:8px; flex-wrap:wrap; margin-top:14px}
+  .chip{
+    padding:6px 13px; font-size:13px; font-family:inherit; font-weight:600;
+    color:var(--text-dim); background:var(--surface-2);
+    border:1px solid var(--line); border-radius:999px; cursor:pointer;
+  }
+  .chip[aria-pressed="true"]{color:#fff; background:var(--accent); border-color:var(--accent)}
+  .count{
+    margin:16px 0 0; font-size:14px; color:var(--text-dim);
+    padding-top:14px; border-top:1px dashed var(--line);
+  }
+  .count b{color:var(--text); font-size:16px}
+  mark{background:var(--accent-soft); color:var(--text); border-radius:3px; padding:0 2px}
+
+  /* ── 카드 ───────────────────────────── */
+  .cards{display:grid; gap:14px; grid-template-columns:1fr}
+  @media (min-width:720px){ .cards{grid-template-columns:repeat(2,1fr)} }
+  .card{
+    background:var(--surface); border:1px solid var(--line);
+    border-radius:var(--radius); box-shadow:var(--shadow);
+    padding:18px; display:flex; flex-direction:column; gap:10px;
+  }
+  .card-head{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+  .badge{
+    font-size:12px; font-weight:700; padding:3px 10px; border-radius:999px;
+    color:var(--mois); background:var(--mois-bg);
+  }
+  .badge[data-org="기상청"]{color:var(--kma); background:var(--kma-bg)}
+  .badge[data-org="경찰청"]{color:var(--npa); background:var(--npa-bg)}
+  .no{font-size:12px; color:var(--text-dim); font-variant-numeric:tabular-nums}
+  .card h2{font-size:16.5px; line-height:1.45; margin:0; letter-spacing:-.01em}
+  .summary{margin:0; font-size:14px; color:var(--text-dim)}
+  .card details summary{
+    cursor:pointer; font-size:13px; font-weight:600; color:var(--accent);
+    list-style:none; padding-top:2px;
+  }
+  .card details summary::-webkit-details-marker{display:none}
+  .card details summary::after{content:" ▾"}
+  .card details[open] summary::after{content:" ▴"}
+  .full{
+    margin:10px 0 0; padding:12px 14px; font-size:13.5px;
+    white-space:pre-wrap; word-break:break-word;
+    background:var(--surface-2); border-radius:10px; color:var(--text);
+  }
+  .empty{
+    padding:40px 20px; text-align:center; color:var(--text-dim); font-size:14px;
+    background:var(--surface); border:1px dashed var(--line); border-radius:var(--radius);
+  }
+
+  /* ── 섹션 ───────────────────────────── */
+  section{margin-top:40px}
+  h2.sec{font-size:19px; margin:0 0 6px; letter-spacing:-.01em}
+  .sec-desc{margin:0 0 16px; font-size:13.5px; color:var(--text-dim)}
+
+  .table-scroll{overflow-x:auto; -webkit-overflow-scrolling:touch}
+  table{border-collapse:collapse; width:100%; min-width:520px; font-size:14px}
+  th,td{padding:11px 13px; text-align:left; border-bottom:1px solid var(--line)}
+  thead th{
+    font-size:12.5px; color:var(--text-dim); font-weight:700;
+    background:var(--surface-2); white-space:nowrap;
+  }
+  tbody th{font-weight:600; white-space:nowrap}
+  td{font-variant-numeric:tabular-nums}
+  td.diff{color:var(--warn); font-weight:700; background:var(--warn-bg)}
+  .legend{margin:12px 0 0; font-size:12.5px; color:var(--text-dim)}
+  .legend i{
+    display:inline-block; width:10px; height:10px; border-radius:3px;
+    background:var(--warn-bg); border:1px solid var(--warn-line);
+    vertical-align:-1px; margin-right:5px;
+  }
+
+  .video{
+    position:relative; width:100%; aspect-ratio:16/9;
+    background:#000; border-radius:var(--radius); overflow:hidden;
+    border:1px solid var(--line); box-shadow:var(--shadow);
+  }
+  .video iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+  .caption{margin:10px 0 0; font-size:12.5px; color:var(--text-dim)}
+  .caption a{color:var(--accent)}
+
+  footer{
+    margin-top:48px; padding-top:20px; border-top:1px solid var(--line);
+    font-size:12.5px; color:var(--text-dim);
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <p class="eyebrow">행정안전부 대변인실 · 합동 브리핑 자료</p>
+    <h1>5월 25일 호우 대응 — 3부처 보도자료 통합 조회</h1>
+    <p class="sub">행정안전부 · 기상청 · 경찰청이 2026년 5월 25일 호우 대응과 관련해 각각 배포한 보도자료 3건을 한 화면에서 검색하고, 부처별로 달리 기재된 수치를 비교합니다.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- 검색 패널 -->
+  <div class="panel">
+    <div class="search-row">
+      <input id="q" type="search" placeholder="키워드 입력 — 예: 1,820 · 중대본 · 교통통제" aria-label="키워드 검색">
+      <button id="btn-search" type="button">검색</button>
+      <button id="btn-reset" class="ghost" type="button">초기화</button>
+    </div>
+    <div class="chips" role="group" aria-label="부처 필터">
+      <button class="chip" type="button" data-org="전체" aria-pressed="true">전체</button>
+      <button class="chip" type="button" data-org="행정안전부" aria-pressed="false">행정안전부</button>
+      <button class="chip" type="button" data-org="기상청" aria-pressed="false">기상청</button>
+      <button class="chip" type="button" data-org="경찰청" aria-pressed="false">경찰청</button>
+    </div>
+    <p class="count" id="count">결과 0건</p>
+  </div>
+
+  <!-- 카드 목록 -->
+  <div class="cards" id="cards"></div>
+
+  <!-- 정합성 매트릭스 -->
+  <section>
+    <h2 class="sec">부처별 정합성 매트릭스</h2>
+    <p class="sec-desc">같은 사건을 다룬 3건의 보도자료에서 5가지 핵심 사실을 뽑아 비교했습니다. 부처 간 값이 엇갈리는 칸은 주황색으로 표시했습니다.</p>
+    <div class="panel" style="padding:0; overflow:hidden">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th scope="col">항목</th><th scope="col">행정안전부</th><th scope="col">기상청</th><th scope="col">경찰청</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">동원 인원</th><td>1,820명</td><td>1,820명</td><td class="diff">1,800명</td></tr>
+            <tr><th scope="row">투입 예산</th><td>23억원</td><td class="diff">25억원</td><td>23억원</td></tr>
+            <tr><th scope="row">중대본 발령 시각</th><td>16:30</td><td class="diff">16:40</td><td>16:30</td></tr>
+            <tr><th scope="row">관할 지역 수</th><td>17개 광역</td><td>17개 광역</td><td class="diff">16개 광역</td></tr>
+            <tr><th scope="row">인명 피해</th><td class="diff">2명</td><td>3명</td><td>3명</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <p class="legend"><i></i>다른 부처와 값이 다른 항목 — 5개 항목 모두에서 최소 1개 부처의 기재가 엇갈립니다. 대외 브리핑 전 수치 정정이 필요합니다.</p>
+  </section>
+
+  <!-- 외부 리소스: YouTube -->
+  <section>
+    <h2 class="sec">외부 리소스 — 호우 국민행동요령 (YouTube)</h2>
+    <p class="sec-desc">행정안전부 공식 유튜브 채널 &lsquo;안전한TV&rsquo;의 호우·태풍 국민행동요령 영상입니다.</p>
+    <div class="video">
+      <iframe
+        src="https://www.youtube-nocookie.com/embed/hsgJ7ZnqVDc"
+        title="[#국민행동요령] 태풍, 호우 발생했다면? 국민행동요령 꼭 알아둬야 해요!"
+        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen></iframe>
+    </div>
+    <p class="caption">출처: 행정안전부 안전한TV — <a href="https://www.youtube.com/watch?v=hsgJ7ZnqVDc" target="_blank" rel="noopener">유튜브에서 보기</a></p>
+  </section>
+
+  <footer>
+    데이터 출처: <code>보도자료데이터.json</code> (3부처 보도자료 3건) · 본 페이지는 정적 HTML 한 파일로 동작합니다.
+  </footer>
+</div>
+
+<!-- fetch 실패(로컬 file:// 열람 등) 대비 내장 사본 -->
+<script type="application/json" id="fallback-data">
+[
+  {
+    "번호": "1",
+    "부처": "행정안전부",
+    "제목": "5월 25일 전국 호우 대응 — 중대본 1단계 가동",
+    "본문": "# 5월 25일 전국 호우 대응 — 중대본 1단계 가동\n\n행정안전부(장관 윤호중)는 5월 25일 16:30 부로 중앙재난안전대책본부 1단계를 가동하고 전국 17개 광역지방정부를 대상으로 호우 대비 비상대응 체계를 확립했다.\n\n이번 대응에는 전국적으로 **1,820명**의 공무원·소방·경찰 인력이 동원됐다. 총 투입 예산은 **23억원**으로, 자연재난 대응을 위한 예비비에서 즉시 집행된다.\n\n중앙재난안전대책본부장은 16:30 가동 명령과 함께 17개 광역지방정부에 일제히 현장 점검 지시를 내렸다. 현재까지 잠정 집계된 인명피해는 **2명**으로, 경상자 위주로 경미한 수준이다.\n\n담당 부서: 자연재난대응과 (044-205-5230)\n\n\n---"
+  },
+  {
+    "번호": "2",
+    "부처": "기상청",
+    "제목": "5월 25일 전국 호우특보 발효 및 대응 동향",
+    "본문": "# 5월 25일 전국 호우특보 발효 및 대응 동향\n\n기상청은 5월 25일 11:00부터 전국 17개 광역에 호우주의보를 단계적으로 발효했으며, 행정안전부와 협업해 **16:40** 부로 중앙재난안전대책본부 1단계 가동을 지원했다.\n\n기상청 IT인프라과는 재난문자 발송 자동화 시스템을 통해 행안부와 연계 대응을 진행했다. 본 대응에 동원된 인력은 행정안전부 집계 기준 **1,820명**이며, 행안부·기상청 합동 예산은 **25억원**이 집행됐다.\n\n전국 17개 광역지방정부에 호우주의보가 발효된 가운데, 잠정 인명피해는 **3명**이다.\n\n담당 부서: 기상청 IT인프라과 (02-2181-0700)\n\n\n---"
+  },
+  {
+    "번호": "3",
+    "부처": "경찰청",
+    "제목": "5월 25일 호우 대응 — 교통통제 현황",
+    "본문": "# 5월 25일 호우 대응 — 교통통제 현황\n\n경찰청은 5월 25일 **16:30** 부로 가동된 행정안전부 중대본 1단계에 따라 전국 주요 도로 통제 체계를 가동했다. 통제 범위는 **16개** 광역을 대상으로 했다.\n\n전국 동원 경찰 인력은 **1,800명**이며, 경찰청 자체 예산 **23억원**을 비상 운영비에 즉시 투입했다.\n\n집계된 인명피해는 **3명**으로, 경찰청 119 합동 대응체계가 신속하게 가동된 결과다.\n\n담당 부서: 경찰청 교통안전관리과 (02-3150-2300)"
+  }
+]
+</script>
+
+<script>
+(function(){
+  "use strict";
+
+  var DATA_URL = "보도자료데이터.json";
+  var articles = [];
+  var org = "전체";
+  var keyword = "";
+
+  var $q = document.getElementById("q");
+  var $cards = document.getElementById("cards");
+  var $count = document.getElementById("count");
+
+  // 본문에서 마크다운 기호를 걷어내고 요약문을 만든다
+  function plain(md){
+    return String(md)
+      .replace(/^#.*$/gm, "")      // 제목 줄 제거
+      .replace(/^---$/gm, "")      // 구분선 제거
+      .replace(/\*\*/g, "")        // 굵게 표시 제거
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function summarize(md){
+    var t = plain(md);
+    return t.length > 110 ? t.slice(0, 110) + "…" : t;
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+    });
+  }
+
+  // 검색어에 걸린 부분을 하이라이트
+  function highlight(s){
+    var safe = escapeHtml(s);
+    if(!keyword) return safe;
+    var k = escapeHtml(keyword).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return safe.replace(new RegExp(k, "gi"), function(m){ return "<mark>" + m + "</mark>"; });
+  }
+
+  // 부처 또는 본문에 키워드가 들어있는 보도자료만 추린다
+  function filtered(){
+    return articles.filter(function(a){
+      if(org !== "전체" && a["부처"] !== org) return false;
+      if(!keyword) return true;
+      var k = keyword.toLowerCase();
+      return a["부처"].toLowerCase().indexOf(k) > -1 ||
+             a["제목"].toLowerCase().indexOf(k) > -1 ||
+             a["본문"].toLowerCase().indexOf(k) > -1;
+    });
+  }
+
+  function render(){
+    var list = filtered();
+    $count.innerHTML = "결과 <b>" + list.length + "</b>건" +
+      (keyword ? " · 키워드 &ldquo;" + escapeHtml(keyword) + "&rdquo;" : "") +
+      (org !== "전체" ? " · " + org : "");
+
+    if(!list.length){
+      $cards.innerHTML = '<p class="empty">조건에 맞는 보도자료가 없습니다. 키워드나 부처 필터를 바꿔 보세요.</p>';
+      return;
+    }
+
+    $cards.innerHTML = list.map(function(a){
+      return '<article class="card">' +
+        '<div class="card-head">' +
+          '<span class="badge" data-org="' + escapeHtml(a["부처"]) + '">' + highlight(a["부처"]) + '</span>' +
+          '<span class="no">보도자료 ' + escapeHtml(a["번호"]) + '호</span>' +
+        '</div>' +
+        '<h2>' + highlight(a["제목"]) + '</h2>' +
+        '<p class="summary">' + highlight(summarize(a["본문"])) + '</p>' +
+        '<details><summary>본문 전체 보기</summary>' +
+          '<div class="full">' + highlight(plain(a["본문"])) + '</div>' +
+        '</details>' +
+      '</article>';
+    }).join("");
+  }
+
+  function search(){
+    keyword = $q.value.trim();
+    render();
+  }
+
+  document.getElementById("btn-search").addEventListener("click", search);
+  $q.addEventListener("input", search);
+  $q.addEventListener("keydown", function(e){ if(e.key === "Enter") search(); });
+
+  document.getElementById("btn-reset").addEventListener("click", function(){
+    $q.value = ""; keyword = ""; org = "전체";
+    document.querySelectorAll(".chip").forEach(function(c){
+      c.setAttribute("aria-pressed", String(c.dataset.org === "전체"));
+    });
+    render();
+  });
+
+  document.querySelectorAll(".chip").forEach(function(chip){
+    chip.addEventListener("click", function(){
+      org = chip.dataset.org;
+      document.querySelectorAll(".chip").forEach(function(c){
+        c.setAttribute("aria-pressed", String(c === chip));
+      });
+      render();
+    });
+  });
+
+  // 보도자료데이터.json 을 읽어온다. 로컬 file:// 등으로 막히면 내장 사본으로 대체.
+  function useFallback(){
+    try{
+      articles = JSON.parse(document.getElementById("fallback-data").textContent);
+    }catch(e){ articles = []; }
+    render();
+  }
+
+  fetch(DATA_URL)
+    .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(json){ articles = json; render(); })
+    .catch(useFallback);
+})();
+</script>
+</body>
+</html>
